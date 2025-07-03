@@ -199,8 +199,5 @@ data/
 # MLflow tracking local data
 mlruns/
 
-# Ignore model files
-models/
-
 # Ignore specific model files
 resave_model.py
