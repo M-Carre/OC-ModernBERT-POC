@@ -1,0 +1,52 @@
+name: Build and Deploy to Azure Container Apps
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AZURE_CONTAINER_REGISTRY: "acrdemomc123" # <<< REMPLACEZ PAR LE NOM DE VOTRE ACR
+  RESOURCE_GROUP: "rg-dbpedia-poc" # <<< REMPLACEZ PAR LE NOM DE VOTRE GROUPE DE RESSOURCES
+  API_IMAGE_NAME: "sklearn-api"
+  DASHBOARD_IMAGE_NAME: "streamlit-dashboard"
+  API_CONTAINER_APP_NAME: "api-dbpedia-poc"
+  DASHBOARD_CONTAINER_APP_NAME: "dashboard-dbpedia-poc"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Log in to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Log in to Azure Container Registry
+      run: az acr login --name ${{ env.AZURE_CONTAINER_REGISTRY }}
+
+    - name: Build and push API image
+      run: |
+        docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.API_IMAGE_NAME }}:latest -f Dockerfile.api .
+        docker push ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.API_IMAGE_NAME }}:latest
+
+    - name: Build and push Dashboard image
+      run: |
+        docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.DASHBOARD_IMAGE_NAME }}:latest -f Dockerfile.dashboard .
+        docker push ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.DASHBOARD_IMAGE_NAME }}:latest
+        
+    - name: Update API Container App to ensure it uses the latest image
+      run: |
+        az containerapp update --name ${{ env.API_CONTAINER_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.API_IMAGE_NAME }}:latest
+      
+    - name: Update Dashboard Container App to ensure it uses the latest image
+      run: |
+        az containerapp update --name ${{ env.DASHBOARD_CONTAINER_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.DASHBOARD_IMAGE_NAME }}:latest
+
+    - name: Log out from Azure
+      run: az logout

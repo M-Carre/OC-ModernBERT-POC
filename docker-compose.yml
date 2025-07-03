@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # Définir notre service API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: sklearn-api
+    container_name: api_service_final
+    ports:
+      - "8000:8000" # C'est la ligne clé : exposer le port de l'API à l'hôte
+
+  # Définir notre service Dashboard
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    image: streamlit-dashboard
+    container_name: dashboard_service_final
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+# Plus besoin de la section 'networks' manuelle

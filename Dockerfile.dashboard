@@ -1,0 +1,35 @@
+# --- Stage 1: Builder ---
+# This stage installs dependencies for the dashboard.
+FROM python:3.11-slim as builder
+
+WORKDIR /app
+
+# Install wheel
+RUN pip install wheel
+
+# Copy requirements and install dependencies
+# We use the same requirements.txt as the API
+COPY requirements.txt .
+RUN pip wheel --no-cache-dir --wheel-dir=/app/wheels -r requirements.txt
+
+
+# --- Stage 2: Final Image ---
+# This is the final, clean image for the dashboard.
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy and install the pre-built wheels from the builder stage
+COPY --from=builder /app/wheels /wheels/
+RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/*
+
+# Copy the dashboard application code
+COPY ./dashboard /app/dashboard
+
+# Expose the default Streamlit port (8501)
+EXPOSE 8501
+
+# Define the command to run the Streamlit app
+# The --server.address=0.0.0.0 flag is crucial for Docker
+# NOUVELLE LIGNE
+CMD ["streamlit", "run", "dashboard/app.py", "--server.address=0.0.0.0", "--server.port=8501", "--server.enableCORS=false"]

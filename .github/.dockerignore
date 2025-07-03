@@ -1,0 +1,23 @@
+# Ignore a virtual environment if it exists
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Ignore build artifacts and IDE files
+.git/
+.vscode/
+.idea/
+build/
+dist/
+*.egg-info
+
+# Ignore local caches and logs
+.pytest_cache/
+.mypy_cache/
+*.log
+
+# Ignore archives
+*.zip
+*.tar.gz

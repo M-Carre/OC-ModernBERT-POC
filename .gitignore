@@ -192,5 +192,15 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
 # Ignore large data files
 data/
+
+# MLflow tracking local data
+mlruns/
+
+# Ignore model files
+models/
+
+# Ignore specific model files
+resave_model.py
