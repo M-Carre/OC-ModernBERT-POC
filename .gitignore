@@ -200,4 +200,7 @@ data/
 mlruns/
 
 # Ignore specific model files
+models/
+models
+.joblib
 resave_model.py
