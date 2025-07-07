@@ -31,23 +31,29 @@ A key decision was made to **pivot the deployment strategy** to the lightweight 
 
 ## 📂 Repository Structure
 
+Of course. Here is a comprehensive and professional `README.md` file for your project. It covers the project's purpose, the technology stack, how to run it, and highlights the key outcomes.
+
+You can copy and paste this directly into your `README.md` file.
+
+```
 .
 ├── .github/
-│ └── workflows/
-│ └── deploy.yml # GitHub Actions workflow for CI/CD
+│   └── workflows/
+│       └── deploy.yml      # GitHub Actions workflow for CI/CD
 ├── api/
-│ └── main.py # FastAPI application code
+│   └── main.py             # FastAPI application code
 ├── dashboard/
-│ └── app.py # Streamlit dashboard code
+│   └── app.py              # Streamlit dashboard code
 ├── models/
-│ └── ... # (Tracked with Git LFS) Model artifacts
-├── .dockerignore # Specifies files to ignore during Docker build
-├── .gitignore # Specifies files to ignore for Git
-├── docker-compose.yml # For local multi-container development
-├── Dockerfile.api # Dockerfile for the FastAPI service
-├── Dockerfile.dashboard # Dockerfile for the Streamlit service
+│   └── ...                 # (Tracked with Git LFS) Model artifacts
+├── .dockerignore           # Specifies files to ignore during Docker build
+├── .gitignore              # Specifies files to ignore for Git
+├── docker-compose.yml      # For local multi-container development
+├── Dockerfile.api          # Dockerfile for the FastAPI service
+├── Dockerfile.dashboard    # Dockerfile for the Streamlit service
 ├── poc_modernbert_exploration.ipynb # Jupyter notebook with all experiments
-└── requirements.txt # Python dependencies
+└── requirements.txt        # Python dependencies
+```
 
 ## ⚙️ How to Run Locally
 
